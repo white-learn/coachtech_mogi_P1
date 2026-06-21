@@ -46,11 +46,8 @@ Composerパッケージをインストールします。
 composer install
 ```
 
-.envファイルを作成します。
-
-```bash
-cp .env.example .env
-```
+.envファイルを用意する
+(※ 案件参画者にもらう)
 
 アプリケーションキーを生成します。
 
@@ -61,13 +58,19 @@ php artisan key:generate
 マイグレーションとシーディングを実行します。
 
 ```bash
-php artisan migrate --seed
+php artisan migrate:fresh --seed
 ```
 
 ストレージリンクを作成します。
 
 ```bash
 php artisan storage:link
+```
+
+下記のリンクにアクセスすることで操作できます。
+
+```bash
+http://localhost
 ```
 
 ---
@@ -127,10 +130,13 @@ http://localhost:8025
 
 ### PHPUnitテスト
 
+.env.testingと.env.duskのSTRIPE_SECRETの値を.envを参考にして入力してください。
+
 テスト用DBを作成します。
 (Mysqlコンテナ内)
 
 ```sql
+mysql -u root -p (パスワードはroot)
 CREATE DATABASE laravel_test;
 ```
 
@@ -148,12 +154,14 @@ Featureテストを実行します。
 php artisan test
 ```
 
-Duskテストを実行します。
+### Duskテストを実行します。
+
 (phpコンテナ内)
 
 ```bash
 php artisan dusk
 ```
+
 
 特定のテストのみ実行する場合
 (phpコンテナ内)
