@@ -39,3 +39,15 @@ services:
       - mysql
     ports:
       - 8080:80
+
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+
+  selenium:
+    image: selenium/standalone-chrome:latest
+    ports:
+      - "9515:4444"
+    shm_size: "2gb"

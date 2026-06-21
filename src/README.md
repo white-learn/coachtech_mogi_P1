@@ -1,64 +1,205 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+# COACHTECHフリマ
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## アプリケーション概要
 
-## About Laravel
+COACHTECHフリマは、商品の出品・購入・お気に入り登録・コメント機能を備えたフリマアプリです。
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+### 主な機能
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- 会員登録
+- ログイン / ログアウト
+- メール認証
+- プロフィール編集
+- 商品一覧表示
+- 商品詳細表示
+- 商品出品
+- 商品購入
+- お気に入り登録
+- コメント投稿
+- 商品検索
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## 環境構築
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### Dockerビルド
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Dockerコンテナを起動します。
 
-## Laravel Sponsors
+```bash
+docker compose up -d --build
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+---
 
-### Premium Partners
+### Laravel環境構築
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+PHPコンテナへ入ります。
 
-## Contributing
+```bash
+docker compose exec php bash
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Composerパッケージをインストールします。
 
-## Code of Conduct
+```bash
+composer install
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+.envファイルを作成します。
 
-## Security Vulnerabilities
+```bash
+cp .env.example .env
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+アプリケーションキーを生成します。
 
-## License
+```bash
+php artisan key:generate
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+マイグレーションとシーディングを実行します。
+
+```bash
+php artisan migrate --seed
+```
+
+ストレージリンクを作成します。
+
+```bash
+php artisan storage:link
+```
+
+---
+
+## Dockerコンテナ構成
+
+| コンテナ名 | 説明                               |
+| ---------- | ---------------------------------- |
+| nginx      | Webサーバー                        |
+| php        | Laravelアプリケーション実行環境    |
+| mysql      | データベース                       |
+| phpMyAdmin | データベース管理ツール             |
+| mailhog    | メール送信確認ツール               |
+| selenium   | Laravel Dusk実行用ブラウザコンテナ |
+
+---
+
+## 使用技術（実行環境）
+
+- PHP 8.x
+- Laravel 8.x
+- MySQL 8.0.26
+- Nginx 1.21.1
+- Docker
+- phpMyAdmin
+- MailHog
+- Laravel Fortify
+- Laravel Dusk
+
+---
+
+## ER図
+
+作成したER図を添付
+
+![ER図](mogi_ER.png)
+
+---
+
+## URL
+
+### 開発環境
+
+http://localhost
+
+### phpMyAdmin
+
+http://localhost:8080
+
+### MailHog
+
+http://localhost:8025
+
+---
+
+## テスト実行
+
+### PHPUnitテスト
+
+テスト用DBを作成します。
+(Mysqlコンテナ内)
+
+```sql
+CREATE DATABASE laravel_test;
+```
+
+テストDBへマイグレーションとシーディングを実行します。
+(phpコンテナ内)
+
+```bash
+php artisan migrate:fresh --env=testing --seed --force
+```
+
+Featureテストを実行します。
+(phpコンテナ内)
+
+```bash
+php artisan test
+```
+
+Duskテストを実行します。
+(phpコンテナ内)
+
+```bash
+php artisan dusk
+```
+
+特定のテストのみ実行する場合
+(phpコンテナ内)
+
+```bash
+php artisan test --filter LoginTest
+```
+
+---
+
+## テスト用アカウント
+
+### ユーザー1
+
+メールアドレス
+
+```text
+user1@example.com
+```
+
+パスワード
+
+```text
+password
+```
+
+### ユーザー2
+
+メールアドレス
+
+```text
+user2@example.com
+```
+
+パスワード
+
+```text
+password
+```
+
+---
+
+## 備考
+
+メール認証機能は MailHog を利用しています。
+
+認証メールは以下のURLから確認できます。
+
+http://localhost:8025
